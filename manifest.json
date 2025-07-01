@@ -1,0 +1,19 @@
+{
+  "manifest_version": 3,
+  "name": "ChatGPT Work Buddy",
+  "version": "1.0",
+  "description": "A personal ChatGPT assistant workspace with selectable modes.",
+  "action": {
+    "default_popup": "popup.html",
+    "default_icon": {
+      "16": "icons-logo-16.png",
+      "48": "icons-logo-48.png",
+      "128": "icons-logo-128.png"
+    }
+  },
+  "permissions": [
+    "storage",
+    "clipboardWrite"
+  ],
+  "host_permissions": ["<all_urls>"]
+}

@@ -1,0 +1,200 @@
+/* === Color Variables === */
+:root {
+  --bg-color: #1e1e2e;
+  --text-color: #ffffff;
+  --accent-color: #e69a29;
+  --muted-color: #aaa;
+  --input-bg: #2a2a3d;
+}
+
+/* === Base Layout === */
+body {
+  margin: 0;
+  padding: 24px;
+  font-family: "Segoe UI", sans-serif;
+  background-color: var(--bg-color);
+  color: var(--text-color);
+  max-width: 900px;
+  margin-inline: auto;
+  box-sizing: border-box;
+}
+
+/* === Header === */
+.header-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 16px;
+}
+
+.header-bar h2 {
+  font-size: 20px;
+  color: var(--accent-color);
+  margin: 0;
+}
+
+.header-bar button {
+  background: none;
+  border: none;
+  font-size: 20px;
+  cursor: pointer;
+  color: var(--accent-color);
+}
+
+/* === Mode Selector === */
+.mode-selector {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.mode-selector button {
+  background-color: var(--input-bg);
+  color: var(--text-color);
+  border: none;
+  padding: 10px 20px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.mode-selector button.active,
+.mode-selector button:hover {
+  background-color: var(--accent-color);
+  color: #000;
+}
+
+/* === Subheaders & Suggestions === */
+.subheader {
+  font-style: italic;
+  font-size: 14px;
+  color: var(--muted-color);
+  margin-bottom: 6px;
+}
+
+.suggestion-box,
+#mode-suggestion {
+  margin-bottom: 10px;
+  background-color: #2d2d3f;
+  padding: 8px 12px;
+  border-radius: 6px;
+  font-size: 13px;
+  color: var(--accent-color);
+}
+
+/* === Assistant Area === */
+.assistant-block {
+  margin-top: 12px;
+}
+
+.assistant-message {
+  background-color: var(--input-bg);
+  padding: 12px;
+  border-radius: 6px;
+  font-size: 14px;
+  margin-bottom: 10px;
+}
+
+.smart-replies,
+.smart-suggestions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 10px;
+}
+
+.smart-replies button,
+.smart-suggestions button {
+  background-color: #333348;
+  color: var(--accent-color);
+  border: none;
+  border-radius: 6px;
+  padding: 8px 12px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.smart-replies button:hover,
+.smart-suggestions button:hover {
+  background-color: #3f3f55;
+}
+
+/* === Prompt Input === */
+textarea#prompt {
+  width: 100%;
+  min-height: 150px;
+  background-color: var(--input-bg);
+  color: var(--text-color);
+  border: none;
+  padding: 12px;
+  margin: 12px 0;
+  border-radius: 6px;
+  font-family: monospace;
+  font-size: 14px;
+}
+
+/* === Actions (Copy, Save) === */
+.actions {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.actions button {
+  flex: 1;
+  background-color: var(--accent-color);
+  border: none;
+  padding: 10px;
+  border-radius: 6px;
+  font-weight: bold;
+  color: #000;
+  cursor: pointer;
+}
+
+/* === Settings Overlay === */
+.settings-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(30, 30, 46, 0.95);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 99;
+}
+
+.settings-overlay.hidden {
+  display: none;
+}
+
+.settings-content {
+  background-color: var(--input-bg);
+  padding: 24px;
+  border-radius: 10px;
+  max-width: 400px;
+  width: 90%;
+  color: var(--text-color);
+}
+
+.settings-content h3 {
+  margin-top: 0;
+  margin-bottom: 16px;
+  color: var(--accent-color);
+}
+
+.toggle-option {
+  display: block;
+  margin: 12px 0;
+}
+
+.close-btn {
+  background-color: var(--accent-color);
+  border: none;
+  padding: 8px 16px;
+  border-radius: 6px;
+  font-weight: bold;
+  cursor: pointer;
+  margin-top: 16px;
+}

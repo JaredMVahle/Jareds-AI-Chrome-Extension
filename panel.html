@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>ChatGPT Work Buddy - Full View</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="header-bar">
+    <h2>ChatGPT Work Buddy</h2>
+    <button id="settings-toggle" title="Settings">⚙️</button>
+  </div>
+
+  <p id="mode-description" class="subheader">
+    Select a mode to get started...
+  </p>
+
+  <div id="mode-suggestion" class="suggestion-box"></div>
+
+  <div class="mode-selector">
+    <button id="dev">Dev</button>
+    <button id="brainstorm">Brainstorm</button>
+    <button id="casual">Casual</button>
+  </div>
+
+  <div class="assistant-block">
+    <div id="assistant-response" class="assistant-message">
+      What would you like to do next?
+    </div>
+    <div id="chat-suggestion-buttons" class="smart-replies"></div>
+  </div>
+
+  <textarea id="prompt" placeholder="Write your prompt here..."></textarea>
+
+  <div class="actions">
+    <button id="copy">Copy Prompt</button>
+    <button id="save">Save</button>
+  </div>
+
+  <div id="smart-suggestions" class="smart-suggestions">
+    <p class="subheader" style="margin-bottom: 4px;">Quick Actions</p>
+    <button data-action="addSettings">Add more settings to the panel</button>
+    <button data-action="responsiveLayout">Make layout responsive</button>
+    <button data-action="fullTabView">Work on full tab view</button>
+  </div>
+
+  <!-- ⚙️ Settings Overlay Panel -->
+  <div id="settings-overlay" class="settings-overlay hidden">
+    <div class="settings-content">
+      <h3>Settings</h3>
+
+      <label class="toggle-option">
+        <input type="checkbox" id="toggle-quick-replies" />
+        Enable Quick Replies
+      </label>
+
+      <label class="toggle-option">
+        <input type="checkbox" id="toggle-suggestions" />
+        Enable Mode Prompt Suggestions
+      </label>
+
+      <button id="close-settings" class="close-btn">Close</button>
+    </div>
+  </div>
+
+  <script src="panel.js"></script>
+</body>
+</html>
