@@ -1,4 +1,3 @@
-/* === Color Variables === */
 :root {
   --bg-color: #1e1e2e;
   --text-color: #ffffff;
@@ -7,151 +6,168 @@
   --input-bg: #2a2a3d;
 }
 
-/* === Base Layout === */
+/* Hide suggestion elements by default */
+.suggestion-box,
+.subheader {
+  display: none;
+}
+/* Main popup layout */
 body {
   margin: 0;
-  padding: 24px;
+  padding: 16px;
   font-family: "Segoe UI", sans-serif;
   background-color: var(--bg-color);
   color: var(--text-color);
-  max-width: 900px;
-  margin-inline: auto;
   box-sizing: border-box;
+  width: 360px;
 }
 
-/* === Header === */
+.popup-container {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+/* Header */
 .header-bar {
   display: flex;
-  align-items: center;
   justify-content: space-between;
-  margin-bottom: 16px;
+  align-items: center;
 }
 
 .header-bar h2 {
-  font-size: 20px;
-  color: var(--accent-color);
   margin: 0;
+  font-size: 18px;
+  color: var(--accent-color);
 }
 
-.header-bar button {
+#settings-btn {
   background: none;
   border: none;
-  font-size: 20px;
+  font-size: 18px;
   cursor: pointer;
   color: var(--accent-color);
 }
 
-/* === Mode Selector === */
-.mode-selector {
-  display: flex;
-  gap: 12px;
-  margin-bottom: 12px;
+/* Subheader + Suggestion */
+.subheader {
+  font-size: 12px;
+  font-style: italic;
+  color: var(--muted-color);
+  margin: -6px 0 -4px 0;
 }
 
-.mode-selector button {
+.suggestion-box {
+  background-color: #2d2d3f;
+  color: var(--accent-color);
+  font-size: 12px;
+  padding: 6px 10px;
+  border-radius: 6px;
+}
+
+/* Mode Selector Buttons */
+.mode-selector {
+  display: flex;
+  gap: 6px;
+}
+
+.mode-selector.compact button {
+  flex: 1;
+  padding: 6px 0;
+  font-size: 12px;
+}
+
+.mode-btn {
   background-color: var(--input-bg);
   color: var(--text-color);
   border: none;
-  padding: 10px 20px;
   border-radius: 6px;
   cursor: pointer;
-  transition: background-color 0.2s;
 }
 
-.mode-selector button.active,
-.mode-selector button:hover {
+.mode-btn.active,
+.mode-btn:hover {
   background-color: var(--accent-color);
   color: #000;
 }
 
-/* === Subheaders & Suggestions === */
-.subheader {
-  font-style: italic;
-  font-size: 14px;
-  color: var(--muted-color);
-  margin-bottom: 6px;
-}
-
-.suggestion-box,
-#mode-suggestion {
-  margin-bottom: 10px;
-  background-color: #2d2d3f;
-  padding: 8px 12px;
-  border-radius: 6px;
-  font-size: 13px;
-  color: var(--accent-color);
-}
-
-/* === Assistant Area === */
-.assistant-block {
-  margin-top: 12px;
-}
-
+/* Assistant Block */
 .assistant-message {
   background-color: var(--input-bg);
-  padding: 12px;
+  padding: 10px;
   border-radius: 6px;
-  font-size: 14px;
-  margin-bottom: 10px;
+  font-size: 13px;
 }
 
-.smart-replies,
-.smart-suggestions {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-  margin-bottom: 10px;
+.smart-replies {
+  margin-top: 6px;
 }
 
-.smart-replies button,
-.smart-suggestions button {
+.smart-replies button {
   background-color: #333348;
   color: var(--accent-color);
   border: none;
-  border-radius: 6px;
-  padding: 8px 12px;
+  border-radius: 5px;
+  padding: 6px 10px;
+  margin-right: 6px;
+  font-size: 12px;
   cursor: pointer;
-  transition: background-color 0.2s;
 }
 
-.smart-replies button:hover,
-.smart-suggestions button:hover {
+.smart-replies button:hover {
   background-color: #3f3f55;
 }
 
-/* === Prompt Input === */
+/* Prompt Input */
 textarea#prompt {
   width: 100%;
-  min-height: 150px;
+  min-height: 100px;
   background-color: var(--input-bg);
   color: var(--text-color);
   border: none;
-  padding: 12px;
-  margin: 12px 0;
+  padding: 10px;
   border-radius: 6px;
   font-family: monospace;
-  font-size: 14px;
+  font-size: 13px;
+  resize: none;
 }
 
-/* === Actions (Copy, Save) === */
+/* Actions */
 .actions {
   display: flex;
-  gap: 12px;
-  margin-bottom: 16px;
+  gap: 8px;
 }
 
 .actions button {
   flex: 1;
   background-color: var(--accent-color);
   border: none;
-  padding: 10px;
+  padding: 8px;
   border-radius: 6px;
   font-weight: bold;
   color: #000;
+  font-size: 13px;
   cursor: pointer;
 }
 
-/* === Settings Overlay === */
+/* Quick Actions */
+.quick-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.quick-actions button {
+  background-color: #2a2a3d;
+  color: var(--accent-color);
+  border: none;
+  border-radius: 5px;
+  padding: 6px 10px;
+  font-size: 12px;
+  cursor: pointer;
+}
+
+/* Settings Overlay */
 .settings-overlay {
   position: fixed;
   top: 0;
@@ -171,30 +187,37 @@ textarea#prompt {
 
 .settings-content {
   background-color: var(--input-bg);
-  padding: 24px;
+  padding: 20px;
   border-radius: 10px;
-  max-width: 400px;
   width: 90%;
-  color: var(--text-color);
+  max-width: 360px;
 }
 
 .settings-content h3 {
   margin-top: 0;
-  margin-bottom: 16px;
+  margin-bottom: 12px;
   color: var(--accent-color);
+  font-size: 16px;
 }
 
 .toggle-option {
-  display: block;
-  margin: 12px 0;
+  display: flex;
+  align-items: center;
+  font-size: 13px;
+  margin-bottom: 10px;
+}
+
+.toggle-option input {
+  margin-right: 8px;
 }
 
 .close-btn {
   background-color: var(--accent-color);
   border: none;
-  padding: 8px 16px;
+  padding: 8px 12px;
   border-radius: 6px;
   font-weight: bold;
+  color: #000;
   cursor: pointer;
-  margin-top: 16px;
+  margin-top: 10px;
 }

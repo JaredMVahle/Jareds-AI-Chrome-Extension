@@ -1,90 +1,61 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>ChatGPT Work Buddy</title>
   <link rel="stylesheet" href="style.css" />
-  <style>
-    html, body {
-      width: 400px;
-      height: 500px;
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
-  </style>
 </head>
 <body>
-  <div class="header-bar">
-    <h2>ChatGPT Work Buddy</h2>
-    <button id="settings-toggle" title="Settings">⚙️</button>
-  </div>
-
-  <p id="mode-description" class="subheader">
-    Select a mode to get started...
-  </p>
-
-  <div id="mode-suggestion" class="suggestion-box"></div>
-
-  <div class="mode-selector">
-    <button id="dev">Dev</button>
-    <button id="brainstorm">Brainstorm</button>
-    <button id="casual">Casual</button>
-  </div>
-
-  <!-- 🧠 Assistant Message + Smart Replies -->
-  <div class="assistant-block">
-    <div id="assistant-response" class="assistant-message">
-      What would you like to do next?
+  <div class="popup-container">
+    <!-- Header Bar -->
+    <div class="header-bar">
+      <h2>ChatGPT Work Buddy</h2>
+      <button id="settings-btn">⚙️</button>
     </div>
-    <div id="chat-suggestion-buttons" class="smart-replies"></div>
+
+    <!-- Subheader and Suggestion -->
+    <p class="subheader"></p>
+    <div class="suggestion-box">💡 Suggestion goes here...</div>
+
+    <!-- Mode Selector -->
+    <div class="mode-selector compact">
+      <button class="mode-btn" id="dev-mode" data-mode="dev">Dev</button>
+      <button class="mode-btn" id="brainstorm-mode" data-mode="brainstorm">Brainstorm</button>
+      <button class="mode-btn" id="casual-mode" data-mode="casual">Casual</button>
+    </div>
+
+    <!-- Prompt Box -->
+    <textarea id="prompt" placeholder="Write your prompt here..."></textarea>
+
+    <!-- Actions -->
+    <div class="actions">
+      <button id="copy-btn">Copy Prompt</button>
+      <button id="save-btn">Save</button>
+    </div>
+
+    <!-- Optional Quick Actions -->
+    <div class="quick-actions">
+      <button>Add more settings to the panel</button>
+      <button>Make layout responsive</button>
+      <button>Work on full tab view</button>
+    </div>
   </div>
 
-  <textarea id="prompt" placeholder="Write your prompt here..."></textarea>
-
-  <div class="actions">
-    <button id="copy">Copy Prompt</button>
-    <button id="save">Save</button>
-  </div>
-
-  <!-- ⚡ Smart Quick Actions -->
-  <div id="smart-suggestions" class="smart-suggestions">
-    <p class="subheader" style="margin-bottom: 4px;">Quick Actions</p>
-    <button data-action="addSettings">Add more settings to the panel</button>
-    <button data-action="responsiveLayout">Make layout responsive</button>
-    <button data-action="fullTabView">Work on full tab view</button>
-  </div>
-
-  <!-- ⚙️ Settings Overlay Panel -->
-  <div id="settings-overlay" class="settings-overlay hidden">
+  <!-- Settings Overlay -->
+  <div class="settings-overlay hidden" id="settings-overlay">
     <div class="settings-content">
       <h3>Settings</h3>
-
       <label class="toggle-option">
-        <input type="checkbox" id="toggle-quick-replies" />
+        <input type="checkbox" id="toggle-quick-replies">
         Enable Quick Replies
       </label>
-
       <label class="toggle-option">
-        <input type="checkbox" id="toggle-suggestions" />
+        <input type="checkbox" id="toggle-mode-suggestions">
         Enable Mode Prompt Suggestions
       </label>
-
-      <label for="popup-size" class="toggle-option">
-        Popup Size:
-        <select id="popup-size">
-          <option value="compact">Compact (400x500)</option>
-          <option value="medium">Medium (500x600)</option>
-          <option value="large">Large (600x700)</option>
-        </select>
-      </label>
-
-      <button id="close-settings" class="close-btn">Close</button>
+      <button class="close-btn" id="close-settings">Close</button>
     </div>
-  </div>
-
-  <div style="text-align: center; margin-top: 12px;">
-    <a href="panel.html" target="_blank">Open in Full Tab</a>
   </div>
 
   <script src="popup.js"></script>
