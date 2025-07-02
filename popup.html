@@ -2,39 +2,32 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>ChatGPT Work Buddy</title>
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
   <div class="popup-container">
-    <!-- Header Bar -->
     <div class="header-bar">
-      <h2>ChatGPT Work Buddy</h2>
-      <button id="settings-btn">⚙️</button>
+      <h2><span class="highlight">ChatGPT</span> Work Buddy</h2>
+      <button id="settings-button" title="Settings">⚙️</button>
     </div>
 
-    <!-- Subheader and Suggestion -->
-    <p class="subheader"></p>
-    <div class="suggestion-box">💡 Suggestion goes here...</div>
+    <div class="suggestion-box" id="mode-suggestion">💡 Suggestion goes here...</div>
 
-    <!-- Mode Selector -->
-    <div class="mode-selector compact">
-      <button class="mode-btn" id="dev-mode" data-mode="dev">Dev</button>
-      <button class="mode-btn" id="brainstorm-mode" data-mode="brainstorm">Brainstorm</button>
-      <button class="mode-btn" id="casual-mode" data-mode="casual">Casual</button>
+    <div class="mode-selector">
+      <button class="mode-btn" data-mode="dev">Dev</button>
+      <button class="mode-btn" data-mode="brainstorm">Brainstorm</button>
+      <button class="mode-btn" data-mode="casual">Casual</button>
     </div>
 
-    <!-- Prompt Box -->
     <textarea id="prompt" placeholder="Write your prompt here..."></textarea>
 
-    <!-- Actions -->
     <div class="actions">
-      <button id="copy-btn">Copy Prompt</button>
-      <button id="save-btn">Save</button>
+      <button id="copy">Copy Prompt</button>
+      <button id="save">Save</button>
     </div>
 
-    <!-- Optional Quick Actions -->
     <div class="quick-actions">
       <button>Add more settings to the panel</button>
       <button>Make layout responsive</button>
@@ -42,17 +35,14 @@
     </div>
   </div>
 
-  <!-- Settings Overlay -->
   <div class="settings-overlay hidden" id="settings-overlay">
     <div class="settings-content">
       <h3>Settings</h3>
       <label class="toggle-option">
-        <input type="checkbox" id="toggle-quick-replies">
-        Enable Quick Replies
+        <input type="checkbox" id="toggle-quick-replies" /> Enable Quick Replies
       </label>
       <label class="toggle-option">
-        <input type="checkbox" id="toggle-mode-suggestions">
-        Enable Mode Prompt Suggestions
+        <input type="checkbox" id="toggle-mode-suggestions" /> Enable Mode Prompt Suggestions
       </label>
       <button class="close-btn" id="close-settings">Close</button>
     </div>

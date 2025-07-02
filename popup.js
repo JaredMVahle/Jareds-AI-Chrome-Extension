@@ -1,111 +1,80 @@
 document.addEventListener("DOMContentLoaded", () => {
-  const modeButtons = document.querySelectorAll(".mode-btn");
   const promptBox = document.getElementById("prompt");
-  const suggestionBox = document.querySelector(".suggestion-box");
-  const subheader = document.querySelector(".subheader");
-  const smartRepliesContainer = document.querySelector(".smart-replies");
-  const settingsBtn = document.getElementById("settings-btn");
+  const copyBtn = document.getElementById("copy");
+  const saveBtn = document.getElementById("save");
+  const modeButtons = document.querySelectorAll(".mode-btn");
+  const suggestionBox = document.getElementById("mode-suggestion");
+  const settingsButton = document.getElementById("settings-button");
   const settingsOverlay = document.getElementById("settings-overlay");
-  const closeBtn = document.getElementById("close-settings");
-
+  const closeSettingsBtn = document.getElementById("close-settings");
   const toggleQuickReplies = document.getElementById("toggle-quick-replies");
   const toggleModeSuggestions = document.getElementById("toggle-mode-suggestions");
 
-  const suggestions = {
-    dev: {
-      tip: "💡 Suggestion: Describe your technical problem or feature goal.",
-      sub: "Dev mode: Precise, technical, and structured responses.",
-      default: "Explain the bug I'm facing with my JavaScript code..."
-    },
-    brainstorm: {
-      tip: "💡 Suggestion: Give me 10 creative project ideas using AI.",
-      sub: "Brainstorm mode: Fast, idea-rich, divergent responses.",
-      default: "Give me 5 unique app ideas related to time management."
-    },
-    casual: {
-      tip: "💡 Suggestion: What's something interesting about today's news?",
-      sub: "Casual mode: Light, conversational, or reflective responses.",
-      default: "What's something interesting about today's news?"
-    }
+  const defaultSuggestions = {
+    dev: "Refactor this function to improve readability.",
+    brainstorm: "Give me 5 unique app ideas related to time management.",
+    casual: "What's something interesting about today’s news?",
   };
 
   function setMode(mode) {
-    modeButtons.forEach(btn => btn.classList.remove("active"));
-    document.getElementById(`${mode}-mode`).classList.add("active");
-
-    if (toggleModeSuggestions.checked) {
-      suggestionBox.textContent = suggestions[mode].tip;
-      subheader.textContent = suggestions[mode].sub;
-      suggestionBox.style.display = "block";
-      subheader.style.display = "block";
-    } else {
-      suggestionBox.textContent = "";
-      subheader.textContent = "";
-      suggestionBox.style.display = "none";
-      subheader.style.display = "none";
-    }
-
-    if (!promptBox.value.trim()) {
-      promptBox.placeholder = suggestions[mode].default;
-    }
-  }
-
-  modeButtons.forEach(btn => {
-    btn.addEventListener("click", () => {
-      setMode(btn.dataset.mode);
+    modeButtons.forEach(btn => {
+      btn.classList.toggle("active", btn.dataset.mode === mode);
     });
-  });
 
-  document.getElementById("copy-btn").addEventListener("click", () => {
-    navigator.clipboard.writeText(promptBox.value);
-  });
-
-  document.getElementById("save-btn").addEventListener("click", () => {
-    localStorage.setItem("savedPrompt", promptBox.value);
-  });
-
-  // Restore saved prompt on load
-  if (localStorage.getItem("savedPrompt")) {
-    promptBox.value = localStorage.getItem("savedPrompt");
-  }
-
-  // Smart reply handler
-  smartRepliesContainer.addEventListener("click", (e) => {
-    if (e.target.classList.contains("smart-reply")) {
-      promptBox.value = e.target.textContent;
+    // Set default prompt suggestion if enabled
+    if (toggleModeSuggestions.checked) {
+      suggestionBox.textContent = `💡 ${defaultSuggestions[mode] || ""}`;
+      suggestionBox.style.display = "block";
+    } else {
+      suggestionBox.style.display = "none";
     }
-  });
-
-  // Settings panel logic
-  settingsBtn.addEventListener("click", () => {
-    settingsOverlay.classList.remove("hidden");
-  });
-
-  closeBtn.addEventListener("click", () => {
-    settingsOverlay.classList.add("hidden");
-  });
-
-  // Save settings to localStorage
-  toggleQuickReplies.addEventListener("change", () => {
-    localStorage.setItem("showQuickReplies", toggleQuickReplies.checked);
-    updateQuickRepliesVisibility();
-  });
-
-  toggleModeSuggestions.addEventListener("change", () => {
-    localStorage.setItem("showModeSuggestions", toggleModeSuggestions.checked);
-    const active = document.querySelector(".mode-btn.active");
-    if (active) setMode(active.dataset.mode);
-  });
-
-  function updateQuickRepliesVisibility() {
-    smartRepliesContainer.style.display = toggleQuickReplies.checked ? "block" : "none";
   }
 
   // Load saved settings
-  toggleQuickReplies.checked = localStorage.getItem("showQuickReplies") === "true";
-  toggleModeSuggestions.checked = localStorage.getItem("showModeSuggestions") !== "false";
-  updateQuickRepliesVisibility();
+  chrome.storage.sync.get(["enableQuickReplies", "enableModeSuggestions"], (data) => {
+    toggleQuickReplies.checked = data.enableQuickReplies ?? true;
+    toggleModeSuggestions.checked = data.enableModeSuggestions ?? true;
 
-  // Set initial mode
-  setMode("casual");
+    // Default to dev mode
+    setMode("dev");
+  });
+
+  // Mode button clicks
+  modeButtons.forEach(button => {
+    button.addEventListener("click", () => {
+      setMode(button.dataset.mode);
+    });
+  });
+
+  // Copy prompt
+  copyBtn.addEventListener("click", () => {
+    navigator.clipboard.writeText(promptBox.value)
+      .then(() => copyBtn.textContent = "Copied!")
+      .catch(() => copyBtn.textContent = "Failed");
+    setTimeout(() => copyBtn.textContent = "Copy Prompt", 1500);
+  });
+
+  // Save prompt
+  saveBtn.addEventListener("click", () => {
+    chrome.storage.local.set({ savedPrompt: promptBox.value });
+  });
+
+  // Settings modal
+  settingsButton.addEventListener("click", () => {
+    settingsOverlay.classList.remove("hidden");
+  });
+
+  closeSettingsBtn.addEventListener("click", () => {
+    settingsOverlay.classList.add("hidden");
+  });
+
+  toggleQuickReplies.addEventListener("change", () => {
+    chrome.storage.sync.set({ enableQuickReplies: toggleQuickReplies.checked });
+  });
+
+  toggleModeSuggestions.addEventListener("change", () => {
+    chrome.storage.sync.set({ enableModeSuggestions: toggleModeSuggestions.checked });
+    const currentMode = document.querySelector(".mode-btn.active")?.dataset.mode;
+    setMode(currentMode);
+  });
 });
