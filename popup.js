@@ -4,6 +4,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const saveBtn = document.getElementById("save");
   const modeButtons = document.querySelectorAll(".mode-btn");
   const suggestionBox = document.getElementById("mode-suggestion");
+  const quickActionsContainer = document.querySelector(".quick-actions");
   const settingsButton = document.getElementById("settings-button");
   const settingsOverlay = document.getElementById("settings-overlay");
   const closeSettingsBtn = document.getElementById("close-settings");
@@ -16,37 +17,64 @@ document.addEventListener("DOMContentLoaded", () => {
     casual: "What's something interesting about today’s news?",
   };
 
+  function loadSettings() {
+    return {
+      enableQuickReplies: JSON.parse(localStorage.getItem("enableQuickReplies") || "true"),
+      showModeSuggestions: JSON.parse(localStorage.getItem("showModeSuggestions") || "true")
+    };
+  }
+
+  function saveSettings(key, value) {
+    localStorage.setItem(key, JSON.stringify(value));
+  }
+
+  function applySettings() {
+    const settings = loadSettings();
+
+    // Quick replies section visibility
+    if (settings.enableQuickReplies) {
+      quickActionsContainer.style.display = "flex";
+      promptBox.style.minHeight = "100px";
+    } else {
+      quickActionsContainer.style.display = "none";
+      promptBox.style.minHeight = "150px";
+    }
+
+    // Suggestion box visibility
+    const current = document.querySelector(".mode-btn.active")?.dataset.mode;
+    if (settings.showModeSuggestions && current) {
+      suggestionBox.textContent = `💡 ${defaultSuggestions[current]}`;
+      suggestionBox.style.display = "block";
+    } else {
+      suggestionBox.style.display = "none";
+    }
+
+    toggleQuickReplies.checked = settings.enableQuickReplies;
+    toggleModeSuggestions.checked = settings.showModeSuggestions;
+  }
+
   function setMode(mode) {
     modeButtons.forEach(btn => {
       btn.classList.toggle("active", btn.dataset.mode === mode);
     });
 
-    // Set default prompt suggestion if enabled
-    if (toggleModeSuggestions.checked) {
-      suggestionBox.textContent = `💡 ${defaultSuggestions[mode] || ""}`;
+    const settings = loadSettings();
+    if (settings.showModeSuggestions) {
+      suggestionBox.textContent = `💡 ${defaultSuggestions[mode]}`;
       suggestionBox.style.display = "block";
     } else {
       suggestionBox.style.display = "none";
     }
   }
 
-  // Load saved settings
-  chrome.storage.sync.get(["enableQuickReplies", "enableModeSuggestions"], (data) => {
-    toggleQuickReplies.checked = data.enableQuickReplies ?? true;
-    toggleModeSuggestions.checked = data.enableModeSuggestions ?? true;
-
-    // Default to dev mode
-    setMode("dev");
-  });
-
-  // Mode button clicks
+  // Mode selection
   modeButtons.forEach(button => {
     button.addEventListener("click", () => {
       setMode(button.dataset.mode);
     });
   });
 
-  // Copy prompt
+  // Copy to clipboard
   copyBtn.addEventListener("click", () => {
     navigator.clipboard.writeText(promptBox.value)
       .then(() => copyBtn.textContent = "Copied!")
@@ -56,10 +84,10 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // Save prompt
   saveBtn.addEventListener("click", () => {
-    chrome.storage.local.set({ savedPrompt: promptBox.value });
+    localStorage.setItem("savedPrompt", promptBox.value);
   });
 
-  // Settings modal
+  // Settings
   settingsButton.addEventListener("click", () => {
     settingsOverlay.classList.remove("hidden");
   });
@@ -69,12 +97,22 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
   toggleQuickReplies.addEventListener("change", () => {
-    chrome.storage.sync.set({ enableQuickReplies: toggleQuickReplies.checked });
+    saveSettings("enableQuickReplies", toggleQuickReplies.checked);
+    applySettings();
   });
 
   toggleModeSuggestions.addEventListener("change", () => {
-    chrome.storage.sync.set({ enableModeSuggestions: toggleModeSuggestions.checked });
-    const currentMode = document.querySelector(".mode-btn.active")?.dataset.mode;
-    setMode(currentMode);
+    saveSettings("showModeSuggestions", toggleModeSuggestions.checked);
+    applySettings();
   });
+
+  // Load saved prompt
+  const saved = localStorage.getItem("savedPrompt");
+  if (saved) {
+    promptBox.value = saved;
+  }
+
+  // Default to dev mode
+  setMode("dev");
+  applySettings();
 });
