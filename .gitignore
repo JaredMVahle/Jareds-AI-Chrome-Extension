@@ -1,3 +1,24 @@
+# Node modules (optional: if you add tooling like npm packages later)
 node_modules/
+
+# OS-specific files
 .DS_Store
-*.log
+Thumbs.db
+
+# Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# VS Code workspace settings (optional: user-specific)
+.vscode/
+
+# Build artifacts (if you bundle/minify later)
+dist/
+build/
+
+# Environment files (optional: if you add API keys)
+.env
+.env.local
+.env.production
+.env.development
