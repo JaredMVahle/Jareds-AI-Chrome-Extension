@@ -10,6 +10,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const closeSettingsBtn = document.getElementById("close-settings");
   const toggleQuickReplies = document.getElementById("toggle-quick-replies");
   const toggleModeSuggestions = document.getElementById("toggle-mode-suggestions");
+  const fetchChatGPTBtn = document.getElementById("fetch-chatgpt");
 
   const defaultSuggestions = {
     dev: "Refactor this function to improve readability.",
@@ -31,7 +32,6 @@ document.addEventListener("DOMContentLoaded", () => {
   function applySettings() {
     const settings = loadSettings();
 
-    // Quick replies section visibility
     if (settings.enableQuickReplies) {
       quickActionsContainer.style.display = "flex";
       promptBox.style.minHeight = "100px";
@@ -40,7 +40,6 @@ document.addEventListener("DOMContentLoaded", () => {
       promptBox.style.minHeight = "150px";
     }
 
-    // Suggestion box visibility
     const current = document.querySelector(".mode-btn.active")?.dataset.mode;
     if (settings.showModeSuggestions && current) {
       suggestionBox.textContent = `💡 ${defaultSuggestions[current]}`;
@@ -67,14 +66,12 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
 
-  // Mode selection
   modeButtons.forEach(button => {
     button.addEventListener("click", () => {
       setMode(button.dataset.mode);
     });
   });
 
-  // Copy to clipboard
   copyBtn.addEventListener("click", () => {
     navigator.clipboard.writeText(promptBox.value)
       .then(() => copyBtn.textContent = "Copied!")
@@ -82,12 +79,10 @@ document.addEventListener("DOMContentLoaded", () => {
     setTimeout(() => copyBtn.textContent = "Copy Prompt", 1500);
   });
 
-  // Save prompt
   saveBtn.addEventListener("click", () => {
     localStorage.setItem("savedPrompt", promptBox.value);
   });
 
-  // Settings
   settingsButton.addEventListener("click", () => {
     settingsOverlay.classList.remove("hidden");
   });
@@ -106,13 +101,28 @@ document.addEventListener("DOMContentLoaded", () => {
     applySettings();
   });
 
-  // Load saved prompt
+  fetchChatGPTBtn.addEventListener("click", () => {
+    chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
+      const tab = tabs[0];
+      if (tab.url.includes("chat.openai.com") || tab.url.includes("chatgpt.com")) {
+        chrome.tabs.sendMessage(tab.id, { action: "getLatestResponse" }, (response) => {
+          if (response && response.response) {
+            promptBox.value = response.response;
+          } else {
+            alert("No response found.");
+          }
+        });
+      } else {
+        alert("Active tab is not ChatGPT.");
+      }
+    });
+  });
+
   const saved = localStorage.getItem("savedPrompt");
   if (saved) {
     promptBox.value = saved;
   }
 
-  // Default to dev mode
   setMode("dev");
   applySettings();
 });
